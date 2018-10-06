@@ -69,9 +69,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             wasEx = false
             wasNeg = false
             val str: String? = tvOut?.text.toString()
-            if (str != null &&  str != "" && str.last().isLetter()) tvOut?.text = ""
-            else
+            if (str != null && (str == "Error" || str == "Infinity")) tvOut?.text = ""
+            if (str != null && str != "" && str.last() in arrayOf('n', 's', 'g')) tvOut?.text = str.substring(0, str.length - 3)
+            else {
+                if (str != "" && str?.last() == '(') lvlBracket--
+                if (str != "" && str?.last() == ')') lvlBracket++
                 tvOut?.text = if (str != null && str.isNotEmpty()) str.substring(0, str.length - 1) else ""
+            }
         }
 
 
@@ -155,11 +159,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 lvlBracket++
                 if (wasEq) addText("", "(") else addText(str, "(")
             }
-            R.id.rightBracketButton ->  {
+            R.id.rightBracketButton -> {
                 lvlBracket--
                 if (wasEq) addText("", ")") else addText(str, ")")
             }
-            R.id.oneButton ->  if (wasEq) addText("", "1") else addText(str, "1")
+            R.id.oneButton -> if (wasEq) addText("", "1") else addText(str, "1")
             R.id.twoButton -> if (wasEq) addText("", "2") else addText(str, "2")
             R.id.thereButton -> if (wasEq) addText("", "3") else addText(str, "3")
             R.id.fourButton -> if (wasEq) addText("", "4") else addText(str, "4")
@@ -171,13 +175,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.zeroButton -> if (wasEq) addText("", "0") else addText(str, "0")
             R.id.piButton -> if (wasEq) addText("", "pi") else addText(str, "pi")
             R.id.eButton -> if (wasEq) addText("", "e") else addText(str, "e")
-            R.id.dotButton -> if (str != null && str.isNotEmpty() && str.last() == '.' ) str else addText(str, ".")
+            R.id.dotButton -> if (str != null && str.isNotEmpty() && str.last() == '.') str else addText(str, ".")
             R.id.expButton -> {
                 if (str != null && wasNeg) {
                     wasNeg = false
                     addText(str.substring(0, str.length - 2), "^")
-                }
-                else if (str != null && str != "" &&  isOp(str)) addText(str.substring(0, str.length - 1), "^")
+                } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "^")
                 else if (wasEx || str == "") ""
                 else {
                     if (str != null) wasNeg = isOp(str)
@@ -188,8 +191,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (str != null && wasNeg) {
                     wasNeg = false
                     addText(str.substring(0, str.length - 2), "/")
-                }
-                else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "/")
+                } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "/")
                 else if (wasEx || str == "") ""
                 else addText(str, "/")
             }
@@ -197,8 +199,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (str != null && wasNeg) {
                     wasNeg = false
                     addText(str.substring(0, str.length - 2), "*")
-                }
-                else if (str != null && str != "" &&  isOp(str)) addText(str.substring(0, str.length - 1), "*")
+                } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "*")
                 else if (wasEx || str == "") ""
                 else {
                     if (str != null) wasNeg = isOp(str)
@@ -210,8 +211,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (str != null && wasNeg) {
                     wasNeg = false
                     str.substring(0, str.length - 1)
-                }
-                else if (str != null && str != "" &&  isOp(str)) addText(str.substring(0, str.length - 1), "+")
+                } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "+")
                 else if (wasEx || str == "") ""
                 else {
                     if (str != null) wasNeg = isOp(str)
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             R.id.subButton -> {
-                if (str != null && str != "" &&  (str.last() == '+' || str.last() == '-')) addText(str.substring(0, str.length - 1), "-")
+                if (str != null && str != "" && (str.last() == '+' || str.last() == '-')) addText(str.substring(0, str.length - 1), "-")
                 else if (wasEx || str == "") ""
                 else {
                     if (str != null) wasNeg = isOp(str)
@@ -254,7 +254,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        tvOut?.text =  savedInstanceState.getString("exp")
+        tvOut?.text = savedInstanceState.getString("exp")
         wasEq = savedInstanceState.getBoolean("Eq")
         wasEx = savedInstanceState.getBoolean("Ex")
         wasNeg = savedInstanceState.getBoolean("Neg")
