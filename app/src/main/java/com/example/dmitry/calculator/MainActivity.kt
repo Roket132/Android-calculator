@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.eightButton -> if (wasEq) addText("", "8") else addText(str, "8")
             R.id.nineButton -> if (wasEq) addText("", "9") else addText(str, "9")
             R.id.zeroButton -> if (wasEq) addText("", "0") else addText(str, "0")
-            R.id.piButton -> if (wasEq) addText("", "pi") else addText(str, "pi")
+            R.id.piButton -> if (wasEq) addText("", "π") else addText(str, "π")
             R.id.eButton -> if (wasEq) addText("", "e") else addText(str, "e")
             R.id.dotButton -> if (str != null && str.isNotEmpty() && str.last() == '.') str else addText(str, ".")
             R.id.expButton -> {
