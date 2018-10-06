@@ -18,9 +18,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private var wasNeg: Boolean = false
     private var lvlBracket: Int = 0
 
-
     private fun addText(str: String?, x: String?): String = if (str != null && str != "") str + x else x.toString()
-    private fun isOp(str: String): Boolean = (str.last() == '/' || str.last() == '*' || str.last() == '-' || str.last() == '+')
+    private fun isOp(str: String): Boolean = (str.last() == '/' || str.last() == '*' || str.last() == '-' || str.last() == '+' || str.last() == '^')
 
     private fun vibration() {
         val mills = 10L
@@ -69,8 +68,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             wasEx = false
             wasNeg = false
             val str: String? = tvOut?.text.toString()
-            if (str != null && (str == "Error" || str == "Infinity")) tvOut?.text = ""
-            if (str != null && str != "" && str.last() in arrayOf('n', 's', 'g')) tvOut?.text = str.substring(0, str.length - 3)
+            if (str != null && str in arrayOf("Infinity", "-Infinity", "Error", "NaN")) tvOut?.text = ""
+            else if (str != null && str != "" && str.last() in arrayOf('n', 's', 'g')) tvOut?.text = str.substring(0, str.length - 3)
             else {
                 if (str != "" && str?.last() == '(') lvlBracket--
                 if (str != "" && str?.last() == ')') lvlBracket++
@@ -119,7 +118,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         vibration()
 
         val newStr: String = when (v?.id) {
-            R.id.factButton -> addText(str, "!")
+            R.id.factButton -> if (wasEx) addText("", "!") else addText(str, "!")
             R.id.sinButton -> {
                 lvlBracket++
                 if (wasEx || wasEq || str == "") addText("", "sin(")
@@ -175,7 +174,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             R.id.zeroButton -> if (wasEq) addText("", "0") else addText(str, "0")
             R.id.piButton -> if (wasEq) addText("", "π") else addText(str, "π")
             R.id.eButton -> if (wasEq) addText("", "e") else addText(str, "e")
-            R.id.dotButton -> if (str != null && str.isNotEmpty() && str.last() == '.') str else addText(str, ".")
+            R.id.dotButton -> {
+                if (wasEq) addText("", ".")
+                else if (str != null && str.isNotEmpty() && str.last() == '.') str else addText(str, ".")
+            }
             R.id.expButton -> {
                 if (str != null && wasNeg) {
                     wasNeg = false
