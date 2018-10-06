@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Calculator</string>
+    <string name="reset">Reset</string>
+    <string name="reset2" translatable="false">C</string>
+    <string name="del" translatable="false">Del</string>
+    <string name="one" translatable="false">1</string>
+    <string name="two" translatable="false">2</string>
+    <string name="there" translatable="false">3</string>
+    <string name="four" translatable="false">4</string>
+    <string name="five" translatable="false">5</string>
+    <string name="six" translatable="false">6</string>
+    <string name="seven" translatable="false">7</string>
+    <string name="eight" translatable="false">8</string>
+    <string name="nine" translatable="false">9</string>
+    <string name="plus" translatable="false">+</string>
+    <string name="zero" translatable="false">0</string>
+    <string name="equal" translatable="false">=</string>
+    <string name="dev" translatable="false">/</string>
+    <string name="mul" translatable="false">*</string>
+    <string name="sub" translatable="false">-</string>
+    <string name="dot" translatable="false">.</string>
+    <string name="leftBracket" translatable="false">(</string>
+    <string name="rightBracket" translatable="false">)</string>
+    <string name="lvl_1" translatable="false">¯</string>
+    <string name="lvl_2" translatable="false">\</string>
+    <string name="lvl_3" translatable="false">_</string>
+    <string name="lvl_4" translatable="false">/</string>
+    <string name="lvl_5" translatable="false">ツ</string>
+    <string name="lvl_6" translatable="false">/</string>
+    <string name="lvl_7" translatable="false">¯\_</string>
+    <string name="lvl_8" translatable="false">(ツ)</string>
+    <string name="lvl_9" translatable="false">_/¯</string>
+
+
+</resources>
