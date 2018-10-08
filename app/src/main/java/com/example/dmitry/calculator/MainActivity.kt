@@ -23,9 +23,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun vibration() {
         val mills = 10L
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (vibrator.hasVibrator()) {
-            vibrator.vibrate(mills)
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+        if (vibrator != null) {
+            if (vibrator.hasVibrator()) {
+                vibrator.vibrate(mills)
+            }
         }
     }
 
@@ -77,7 +79,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-
         oneButton.setOnClickListener(this)
         twoButton.setOnClickListener(this)
         thereButton.setOnClickListener(this)
@@ -109,7 +110,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         equalButton.setOnClickListener(oclBtnEqual)
         delButton.setOnClickListener(oclBtnDel)
         resetButton.setOnClickListener(oclBtnReset)
-
     }
 
     override fun onClick(v: View?) {
@@ -119,41 +119,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val newStr: String = when (v?.id) {
             R.id.factButton -> if (wasEx) addText("", "!") else addText(str, "!")
-            R.id.sinButton -> {
-                lvlBracket++
-                if (wasEx || wasEq || str == "") addText("", "sin(")
-                else addText(str, "sin(")
-            }
-            R.id.cosButton -> {
-                lvlBracket++
-                if (wasEx || wasEq || str == "") addText("", "cos(")
-                else addText(str, "cos(")
-            }
-            R.id.tanButton -> {
-                lvlBracket++
-                if (wasEx || wasEq || str == "") addText("", "tan(")
-                else addText(str, "tan(")
-            }
-            R.id.logButton -> {
-                lvlBracket++
-                if (wasEx || wasEq || str == "") addText("", "log(")
-                else addText(str, "log(")
-            }
-            R.id.log2Button -> {
-                lvlBracket++
-                if (wasEx || wasEq || str == "") addText("", "log2(")
-                else addText(str, "log2(")
-            }
-            R.id.log10Button -> {
-                lvlBracket++
-                if (wasEx || wasEq || str == "") addText("", "log10(")
-                else addText(str, "log10(")
-            }
-            R.id.sqrtButton -> {
-                lvlBracket++
-                if (wasEx || wasEq || str == "") addText("", "√(")
-                else addText(str, "√(")
-            }
+            R.id.sinButton -> addOperation(str, "sin(")
+            R.id.cosButton -> addOperation(str, "cos(")
+            R.id.tanButton -> addOperation(str, "tan(")
+            R.id.logButton -> addOperation(str, "log(")
+            R.id.log2Button -> addOperation(str, "log2(")
+            R.id.log10Button -> addOperation(str, "log10(")
+            R.id.sqrtButton -> addOperation(str, "√(")
             R.id.leftBracketButton -> {
                 lvlBracket++
                 if (wasEq) addText("", "(") else addText(str, "(")
@@ -162,64 +134,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 lvlBracket--
                 if (wasEq) addText("", ")") else addText(str, ")")
             }
-            R.id.oneButton -> if (wasEq) addText("", "1") else addText(str, "1")
-            R.id.twoButton -> if (wasEq) addText("", "2") else addText(str, "2")
-            R.id.thereButton -> if (wasEq) addText("", "3") else addText(str, "3")
-            R.id.fourButton -> if (wasEq) addText("", "4") else addText(str, "4")
-            R.id.fiveButton -> if (wasEq) addText("", "5") else addText(str, "5")
-            R.id.sixButton -> if (wasEq) addText("", "6") else addText(str, "6")
-            R.id.sevenButton -> if (wasEq) addText("", "7") else addText(str, "7")
-            R.id.eightButton -> if (wasEq) addText("", "8") else addText(str, "8")
-            R.id.nineButton -> if (wasEq) addText("", "9") else addText(str, "9")
-            R.id.zeroButton -> if (wasEq) addText("", "0") else addText(str, "0")
-            R.id.piButton -> if (wasEq) addText("", "π") else addText(str, "π")
-            R.id.eButton -> if (wasEq) addText("", "e") else addText(str, "e")
+            R.id.oneButton -> addDigit(str, "1")
+            R.id.twoButton -> addDigit(str, "2")
+            R.id.thereButton -> addDigit(str, "3")
+            R.id.fourButton -> addDigit(str, "4")
+            R.id.fiveButton -> addDigit(str, "5")
+            R.id.sixButton -> addDigit(str, "6")
+            R.id.sevenButton -> addDigit(str, "7")
+            R.id.eightButton -> addDigit(str, "8")
+            R.id.nineButton -> addDigit(str, "9")
+            R.id.zeroButton -> addDigit(str, "0")
+            R.id.piButton -> addDigit(str, "π")
+            R.id.eButton -> addDigit(str, "e")
             R.id.dotButton -> {
                 if (wasEq) addText("", ".")
                 else if (str != null && str.isNotEmpty() && str.last() == '.') str else addText(str, ".")
             }
-            R.id.expButton -> {
-                if (str != null && wasNeg) {
-                    wasNeg = false
-                    addText(str.substring(0, str.length - 2), "^")
-                } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "^")
-                else if (wasEx || str == "") ""
-                else {
-                    if (str != null) wasNeg = isOp(str)
-                    addText(str, "^")
-                }
-            }
-            R.id.divButton -> {
-                if (str != null && wasNeg) {
-                    wasNeg = false
-                    addText(str.substring(0, str.length - 2), "/")
-                } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "/")
-                else if (wasEx || str == "") ""
-                else addText(str, "/")
-            }
-            R.id.mulButton -> {
-                if (str != null && wasNeg) {
-                    wasNeg = false
-                    addText(str.substring(0, str.length - 2), "*")
-                } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "*")
-                else if (wasEx || str == "") ""
-                else {
-                    if (str != null) wasNeg = isOp(str)
-                    addText(str, "*")
-                }
-
-            }
-            R.id.plusButton -> {
-                if (str != null && wasNeg) {
-                    wasNeg = false
-                    str.substring(0, str.length - 1)
-                } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), "+")
-                else if (wasEx || str == "") ""
-                else {
-                    if (str != null) wasNeg = isOp(str)
-                    addText(str, "+")
-                }
-            }
+            R.id.expButton -> addOperation(str, "^", 2)
+            R.id.divButton -> addOperation(str, "/", 2)
+            R.id.mulButton -> addOperation(str, "*", 2)
+            R.id.plusButton -> addOperation(str, "+", 1)
             R.id.subButton -> {
                 if (str != null && str != "" && (str.last() == '+' || str.last() == '-')) addText(str.substring(0, str.length - 1), "-")
                 else if (wasEx || str == "") ""
@@ -244,7 +178,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         outState.apply {
             putString("exp", tvOut?.text.toString())
             putBoolean("Eq", wasEq)
@@ -252,6 +185,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             putBoolean("Neg", wasNeg)
             putInt("lvl", lvlBracket)
         }
+        super.onSaveInstanceState(outState)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -263,4 +197,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         lvlBracket = savedInstanceState.getInt("lvl")
     }
 
+    private fun addOperation(str: String?, char: String, len: Int): String {
+        return if (str != null && wasNeg) {
+            wasNeg = false
+            addText(str.substring(0, str.length - len), if (char == "+") "" else char)
+        } else if (str != null && str != "" && isOp(str)) addText(str.substring(0, str.length - 1), char)
+        else if (wasEx || str == "") ""
+        else {
+            if (str != null) wasNeg = isOp(str)
+            addText(str, char)
+        }
+    }
+
+    private fun addOperation(str: String?, add: String?): String {
+        lvlBracket++
+        return if (wasEx || wasEq || str == "") addText("", add)
+        else addText(str, add)
+    }
+
+    private fun addDigit(str: String?, add: String?): String {
+        return if (wasEq) addText("", add) else addText(str, add)
+    }
 }
