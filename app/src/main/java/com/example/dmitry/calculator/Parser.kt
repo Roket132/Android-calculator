@@ -4,7 +4,7 @@ import net.objecthunter.exp4j.ExpressionBuilder
 import net.objecthunter.exp4j.operator.Operator
 
 
-var factorial: Operator = object : Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
+val factorial: Operator = object : Operator("!", 1, true, Operator.PRECEDENCE_POWER + 1) {
 
     override fun apply(vararg args: Double): Double {
         val arg = args[0].toInt()
@@ -24,23 +24,17 @@ var factorial: Operator = object : Operator("!", 1, true, Operator.PRECEDENCE_PO
 
 class Parser {
 
-    private fun isWhole(value: Double):Boolean { return value - value.toInt() == 0.0 }
+    private fun isWhole(value: Double): Boolean {
+        return value - value.toInt() == 0.0
+    }
 
     fun evaluate(str2: String?): String {
-
-        val str: String? = str2?.replace("√", "sqrt")
-
         return try {
+            val str: String? = str2?.replace("√", "sqrt")
             val op = ExpressionBuilder(str).operator(factorial).build()
-
-            try {
-                val res: Double = op.evaluate()
-                return if (!isWhole(res)) res.toString() else (res.toLong()).toString()
-            } catch (var4: Exception) {
-                "Error"
-            }
-
-        } catch (var5: Exception) {
+            val res: Double = op.evaluate()
+            return if (!isWhole(res)) res.toString() else (res.toLong()).toString()
+        } catch (var4: Exception) {
             "Error"
         }
     }
